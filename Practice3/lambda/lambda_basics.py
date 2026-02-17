@@ -1,37 +1,21 @@
-x = lambda a : a + 10
-print(x(5))
-
-x = lambda a, b : a * b
-print(x(5, 6))
+# lambda_basics.py
+# Basic lambda expressions
 
 
-x = lambda a, b, c : a + b + c
-print(x(5, 6, 2))
+# Example 1
+square = lambda x: x * x
 
-def myfunc(n):
-  return lambda a : a * n
+# Example 2
+add = lambda a, b: a + b
 
-def myfunc(n):
-  return lambda a : a * n
+# Example 3
+is_even = lambda x: x % 2 == 0
 
-mydoubler = myfunc(2)
-
-print(mydoubler(11))
-
-
-def myfunc(n):
-  return lambda a : a * n
-
-mytripler = myfunc(3)
-
-print(mytripler(11))
+# Example 4
+greet = lambda name: "Hello " + name
 
 
-def myfunc(n):
-  return lambda a : a * n
-
-mydoubler = myfunc(2)
-mytripler = myfunc(3)
-
-print(mydoubler(11))
-print(mytripler(11))
+print(square(5))
+print(add(3, 4))
+print(is_even(6))
+print(greet("Azamat"))
