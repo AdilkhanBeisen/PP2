@@ -1,29 +1,39 @@
-def my_function():
-  print("Hello from a function")
+# Example 1: Function without parameters
 
-my_function()
+def say_hello():
+    # This function prints a simple greeting
+    print("Hello!")
 
+# Calling the function
+say_hello()
 
-def my_function():
-  print("Hello from a function")
+# Example 3: Function with two parameters
 
-my_function()
-my_function()
-my_function()
+def add(a, b):
+    # This function prints the sum of two numbers
+    print("Sum:", a + b)
 
-
-temp1 = 77
-celsius1 = (temp1 - 32) * 5 / 9
-print(celsius1)
-
-temp2 = 95
-celsius2 = (temp2 - 32) * 5 / 9
-print(celsius2)
-
-temp3 = 50
-celsius3 = (temp3 - 32) * 5 / 9
-print(celsius3)
+# Calling the function
+add(5, 3)
 
 
-def my_function():
-  pass
+# Example 2: Function with one parameter
+
+def greet(name):
+    # This function greets a person using their name
+    print("Hello,", name)
+
+# Calling the function with argument
+n=int(input())
+greet(n)
+
+# Example 4: Function that performs calculation
+
+def multiply(x, y):
+    # This function multiplies two numbers
+    result = x * y
+    print("Result:", result)
+
+# Calling the function
+multiply(4, 6)
+

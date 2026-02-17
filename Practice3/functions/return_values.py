@@ -1,36 +1,29 @@
-def get_greeting():
-  return "Hello from a function"
-
-message = get_greeting()
-print(message)
-
-
-def get_greeting():
-  return "Hello from a function"
-
-print(get_greeting())
-
-def my_function(x, y):
-  return x + y
-
-result = my_function(5, 3)
-print(result)
+# Example 1
+def add(a, b):
+    # Returns sum of two numbers
+    return a + b
 
 
-def my_function():
-  return ["apple", "banana", "cherry"]
-
-fruits = my_function()
-print(fruits[0])
-print(fruits[1])
-print(fruits[2])
+# Example 2
+def square(x):
+    # Returns square of number
+    return x * x
 
 
-def my_function():
-  return (10, 20)
-
-x, y = my_function()
-print("x:", x)
-print("y:", y)
+# Example 3
+def is_even(number):
+    # Returns True if number is even
+    return number % 2 == 0
 
 
+# Example 4
+def get_length(text):
+    # Returns length of text
+    return len(text)
+
+
+# Using returned values
+print(add(5, 3))
+print(square(4))
+print(is_even(6))
+print(get_length("Python"))

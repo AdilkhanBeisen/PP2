@@ -1,114 +1,37 @@
-def my_function(fname):
-  print(fname + " Refsnes")
-
-my_function("Emil")
-my_function("Tobias")
-my_function("Linus")
-
-def my_function(name): # name is a parameter
-  print("Hello", name)
-
-my_function("Emil") # "Emil" is an argument
+# Example 1
+def greet(name="Guest"):
+    # Uses default name if no argument is passed
+    print("Hello,", name)
 
 
-def my_function(fname, lname):
-  print(fname + " " + lname)
-
-my_function("Emil", "Refsnes")
-
-
-def my_function(name = "friend"):
-  print("Hello", name)
-
-my_function("Emil")
-my_function("Tobias")
-my_function()
-my_function("Linus")
-
-def my_function(country = "Norway"):
-  print("I am from", country)
-
-my_function("Sweden")
-my_function("India")
-my_function()
-my_function("Brazil")
-
-def my_function(animal, name):
-  print("I have a", animal)
-  print("My", animal + "'s name is", name)
-
-my_function(name = "Buddy", animal = "dog")
-
-def my_function(animal, name):
-  print("I have a", animal)
-  print("My", animal + "'s name is", name)
-
-my_function("dog", "Buddy")
-
-def my_function(animal, name):
-  print("I have a", animal)
-  print("My", animal + "'s name is", name)
-
-my_function("Buddy", "dog")
+# Example 2
+def power(base, exponent=2):
+    # Raises base to exponent (default 2)
+    print(base ** exponent)
 
 
-
-def my_function(animal, name, age):
-  print("I have a", age, "year old", animal, "named", name)
-
-my_function("dog", name = "Buddy", age = 5)
-
-
-def my_function(fruits):
-  for fruit in fruits:
-    print(fruit)
-
-my_fruits = ["apple", "banana", "cherry"]
-my_function(my_fruits)
+# Example 3
+def show_country(country="Kazakhstan"):
+    # Displays country name
+    print("Country:", country)
 
 
-def my_function(person):
-  print("Name:", person["name"])
-  print("Age:", person["age"])
-
-my_person = {"name": "Emil", "age": 25}
-my_function(my_person)
-
-def my_function():
-  return ["apple", "banana", "cherry"]
-
-fruits = my_function()
-print(fruits[0])
-print(fruits[1])
-print(fruits[2])
-
-def my_function():
-  return ["apple", "banana", "cherry"]
-
-fruits = my_function()
-print(fruits[0])
-print(fruits[1])
-print(fruits[2])
+# Example 4
+def multiply(a, b=10):
+    # Multiplies a by b (default is 10)
+    print(a * b)
 
 
-def my_function(name, /):
-  print("Hello", name)
+# Calls
+greet()
+greet("Ali")
 
-my_function("Emil")
+power(5)
+power(5, 3)
 
-def my_function(name):
-  print("Hello", name)
+show_country()
+show_country("Japan")
 
-my_function(name = "Emil")
+multiply(5)
+multiply(5, 2)
 
-def my_function(*, name):
-  print("Hello", name)
-
-my_function(name = "Emil")
-
-
-
-def my_function(name):
-  print("Hello", name)
-
-my_function("Emil")
