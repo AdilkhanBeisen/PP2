@@ -1,6 +1,6 @@
-## Practice 5
+# Practice 5
 
-# Receipt Parser (Python RegEx Practice)
+## Receipt Parser (Python RegEx Practice)
 - Extract all prices from the receipt
 - Extract all product names
 - Calculate the total amount
