@@ -9,6 +9,8 @@ This repository contains Python practice tasks for the course Programming Princi
 - Practice4: Practice4 - Python iterators, generators, dates, math, and JSON
 - Practice5: Practice5 - Python RegEx and receipt parsing examples
 - Practice6: Practice6 - file handling and built-in functions examples
+
+
 Language: Python
 # Author:
 Beisen Adilkhan
