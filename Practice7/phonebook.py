@@ -49,6 +49,15 @@ def search_phone(phone):
     for i, (id, name, phone) in enumerate(rows, start=1):
         print(f"{i}. ID: {id} | Name: {name} | Phone: {phone}")
 
+def search_phone_prefix(prefix):
+    cur.execute("SELECT * FROM contacts WHERE phone LIKE %s", (f"{prefix}%",))
+    rows = cur.fetchall()
+    if not rows:
+        print("No contacts found")
+        return
+    for i, (id, name, phone) in enumerate(rows, start=1):
+        print(f"{i}. ID: {id} | Name: {name} | Phone: {phone}")
+
 def delete_contact(name):
     cur.execute("DELETE FROM contacts WHERE name=%s", (name,))
     conn.commit()
@@ -72,7 +81,7 @@ def import_csv():
 # Main program loop (menu system)
 # Runs until user chooses to exit
 while True:
-    print("\n1)Add 2)Show 3)Update phone number 4)Update name 5)Delete 6)Import CSV 7)Search by name 8)Search by phone 9)Exit")
+    print("\n1)Add 2)Show 3)Update phone number 4)Update name 5)Delete 6)Import CSV 7)Search by name 8)Search by phone 9)Search by phone prefix 10)Exit")
     n=input("Choose:")
 
     if n=="1":
@@ -106,4 +115,7 @@ while True:
         phone=input("Enter phone to search: ")
         search_phone(phone)
     elif n=="9":
+        prefix=input("Enter phone prefix: ")
+        search_phone_prefix(prefix)
+    elif n=="10":
         break
