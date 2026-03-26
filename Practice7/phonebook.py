@@ -31,6 +31,24 @@ def update_name(old_name, new_name):
     cur.execute("UPDATE contacts SET name=%s WHERE name=%s", (new_name,old_name))
     conn.commit()
 
+def search_name(name):
+    cur.execute("SELECT * FROM contacts WHERE name ILIKE %s", (f"%{name}%",))
+    rows = cur.fetchall()
+    if not rows:
+        print("No contacts found")
+        return
+    for i, (id, name, phone) in enumerate(rows, start=1):
+        print(f"{i}. ID: {id} | Name: {name} | Phone: {phone}")
+
+def search_phone(phone):
+    cur.execute("SELECT * FROM contacts WHERE phone ILIKE %s", (f"%{phone}%",))
+    rows = cur.fetchall()
+    if not rows:
+        print("No contacts found")
+        return
+    for i, (id, name, phone) in enumerate(rows, start=1):
+        print(f"{i}. ID: {id} | Name: {name} | Phone: {phone}")
+
 def delete_contact(name):
     cur.execute("DELETE FROM contacts WHERE name=%s", (name,))
     conn.commit()
@@ -50,11 +68,11 @@ def import_csv():
             cur.execute("INSERT INTO contacts (name, phone) VALUES (%s, %s)", (row[0], row[1]))
     conn.commit()
     print("CSV imported")
-    
+
 # Main program loop (menu system)
 # Runs until user chooses to exit
 while True:
-    print("\n1)Add 2)Show 3)Update phone number  4)Update name 5)Delete 6)Import CSV 7)Exit")
+    print("\n1)Add 2)Show 3)Update phone number 4)Update name 5)Delete 6)Import CSV 7)Search by name 8)Search by phone 9)Exit")
     n=input("Choose:")
 
     if n=="1":
@@ -82,4 +100,10 @@ while True:
     elif n=="6":
         import_csv()
     elif n=="7":
+        name=input("Enter name to search: ")
+        search_name(name)
+    elif n=="8":
+        phone=input("Enter phone to search: ")
+        search_phone(phone)
+    elif n=="9":
         break
