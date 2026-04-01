@@ -10,6 +10,7 @@ This repository contains Python practice tasks for the course Programming Princi
 - Practice5: Practice5 - Python RegEx and receipt parsing examples
 - Practice6: Practice6 - file handling and built-in functions examples
 - Practice7: Practice7 - PhoneBook with PostgreSQL
+- Practice8: Practice8 - PhoneBook with functions and stored procedures
 
 Language: Python
 # Author:
