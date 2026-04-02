@@ -1,19 +1,20 @@
 from connect import conn, cur
-# Import database connection and cursor from connect.py
-# conn - connection to PostgreSQL
-# cur - cursor to execute SQL queries
 
 
-# Function to add a new contact to the database
-# Takes name and phone number as input
-# Uses INSERT SQL query to store data
 def add_contact(name, phone):
     cur.execute("CALL public.upsert_contact(%s::text, %s::text)", (name, phone))
     conn.commit()
 
+def print_rows(rows):
+    if not rows:
+        print("No contacts found")
+        return
 
-# Function to display all contacts
-# Executes SELECT query and fetches all rows
+    for i, (name, phone) in enumerate(rows, start=1):
+        print(f"{i}. Name: {name} | Phone: {phone}")
+
+
+
 def show():
     limit = int(input("Limit: "))
     offset = int(input("Offset: "))
@@ -24,6 +25,25 @@ def show():
         return
     for i, (name, phone) in enumerate(rows, start=1):
         print(f"{i}. Name: {name} | Phone: {phone}")
+
+
+def insert_many():
+    names=[]
+    phones=[]
+    count=int(input("How many contacts:"))
+
+    for i in range(count):
+        name = input(f"Enter name {i+1}: ")
+        phone = input(f"Enter phone {i+1}: ")
+
+        names.append(name)
+        phones.append(phone)
+
+    cur.execute("CALL insert_m(%s, %s)", (names, phones))
+    conn.commit()
+
+    print("Done")
+
 
 def update_phone(name, new_phone):
     cur.execute("CALL public.upsert_contact(%s::text, %s::text)", (name, new_phone))
@@ -36,54 +56,21 @@ def update_name(old_name, new_name):
 def search_name(name):
     cur.execute("SELECT * FROM get_contacts_by_pattern(%s)", (name,))
     rows = cur.fetchall()
-    if not rows:
-        print("No contacts found")
-        return
-    for i, (name, phone) in enumerate(rows, start=1):
-        print(f"{i}. Name: {name} | Phone: {phone}")
+    print_rows(rows)
 
 def search_phone(phone):
     cur.execute("SELECT * FROM get_contacts_by_pattern(%s)", (phone,))
     rows = cur.fetchall()
-    if not rows:
-        print("No contacts found")
-        return
-    for i, (name, phone) in enumerate(rows, start=1):
-        print(f"{i}. Name: {name} | Phone: {phone}")
 
-def search_phone_prefix(prefix):
-    cur.execute("SELECT * FROM contacts WHERE phone LIKE %s", (f"{prefix}%",))
-    rows = cur.fetchall()
-    if not rows:
-        print("No contacts found")
-        return
-    for i, (id, name, phone) in enumerate(rows, start=1):
-        print(f"{i}. ID: {id} | Name: {name} | Phone: {phone}")
-
+    print_rows(rows)
 def delete_contact(value):
     cur.execute("CALL public.delete_contact(%s::text)", (value,))
     conn.commit()
 
-# Function to import contacts from CSV file
-# Reads file line by line and inserts into database
-def import_csv():
-    import csv
 
-     # Open CSV file in read mode
-    with open("contacts.csv", newline='', encoding='utf-8') as f:
-        reader = csv.reader(f)
 
-         # Loop through each row in CSV
-        for row in reader:
-            # row[0] = name, row[1] = phone
-            cur.execute("INSERT INTO contacts (name, phone) VALUES (%s, %s)", (row[0], row[1]))
-    conn.commit()
-    print("CSV imported")
-
-# Main program loop (menu system)
-# Runs until user chooses to exit
 while True:
-    print("\n1)Add 2)Show 3)Update phone number 4)Update name 5)Delete 6)Search by name 7)Search by phone 8)Search by phone prefix 10)Exit")
+    print("\n1)Add 2)Show 3)Update phone number 4)Update name 5)Delete 6)Search by name 7)Search by phone 8)Insert many contacts 10)Exit")
     n=input("Choose:")
 
     if n=="1":
@@ -105,8 +92,8 @@ while True:
         update_name(name, new_nam)
         print("Done")
     elif n=="5":
-        name=input("Name: ")
-        delete_contact(name)
+        value=input("Enter name or phone: ")
+        delete_contact(value)
         print("Done")
     elif n=="6":
         name=input("Enter name to search: ")
@@ -115,7 +102,6 @@ while True:
         phone=input("Enter phone to search: ")
         search_phone(phone)
     elif n=="8":
-        prefix=input("Enter phone prefix: ")
-        search_phone_prefix(prefix)
+        insert_many()
     elif n=="10":
         break
