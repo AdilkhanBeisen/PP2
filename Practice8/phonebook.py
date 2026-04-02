@@ -10,8 +10,13 @@ def print_rows(rows):
         print("No contacts found")
         return
 
-    for i, (name, phone) in enumerate(rows, start=1):
-        print(f"{i}. Name: {name} | Phone: {phone}")
+    for i, row in enumerate(rows, start=1):
+        if len(row) == 3:
+            name, surname, phone = row
+            print(f"{i}. Name: {name} | Surname: {surname} | Phone: {phone}")
+        else:
+            name, phone = row
+            print(f"{i}. Name: {name} | Phone: {phone}")
 
 
 
@@ -20,26 +25,15 @@ def show():
     offset = int(input("Offset: "))
     cur.execute("SELECT * FROM get_contacts_paginated(%s, %s)", (limit, offset))
     rows = cur.fetchall()
-    if not rows:
-        print("No contacts found")
-        return
-    for i, (name, phone) in enumerate(rows, start=1):
-        print(f"{i}. Name: {name} | Phone: {phone}")
+    print_rows(rows)
 
 
 def insert_many():
-    names=[]
-    phones=[]
-    count=int(input("How many contacts:"))
+    names=["Aydyn","Azamat","Nurdaulet"]
+    surname=["Darkhanuly","Esbol","Aktan"]
+    phones=["10000","20000","30000"]
 
-    for i in range(count):
-        name = input(f"Enter name {i+1}: ")
-        phone = input(f"Enter phone {i+1}: ")
-
-        names.append(name)
-        phones.append(phone)
-
-    cur.execute("CALL insert_m(%s, %s)", (names, phones))
+    cur.execute("CALL insert_m(%s, %s, %s)", (names, surname, phones))
     conn.commit()
 
     print("Done")

@@ -17,23 +17,24 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE insert_m(names text[], phones text[])
+CREATE OR REPLACE PROCEDURE insert_m(names text[], surnames text[], phones text[])
 LANGUAGE plpgsql AS $$
 DECLARE
     i INT;
-    invalid_phones TEXT[] := '{}';
+    invalid_data TEXT[] := '{}';
 BEGIN
-   for i in 1.. array_length(names,1) LOOP
-
-    IF phones[i]~ '^\d+$' THEN
-        INSERT INTO contacts(name, phone) VALUES(names[i], phones[i]);
-
-    ELSE
-        invalid_phones := array_append(invalid_phones, phones[i]);
-    END IF;
-
+    FOR i IN 1..array_length(names, 1) LOOP
+        IF phones[i] ~ '^\d+$' THEN
+            INSERT INTO contacts(name, surname, phone)
+            VALUES (names[i], surnames[i], phones[i]);
+        ELSE
+            invalid_data := array_append(
+                invalid_data,
+                names[i] || ' ' || surnames[i] || ' - ' || phones[i]
+            );
+        END IF;
     END LOOP;
-    RAISE NOTICE 'Invalid phones: %', invalid_phones;
+
+    RAISE NOTICE 'Incorrect data: %', invalid_data;
 END;
 $$;
-
