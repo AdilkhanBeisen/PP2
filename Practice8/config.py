@@ -2,7 +2,7 @@
 # These variables are used in connect.py to establish a connection to PostgreSQL
 
 # Name of the database to connect to
-DB_NAME = "phonebook_db"
+DB_NAME = "postgres"
 # Database username (PostgreSQL user)
 USER = "postgres"
 # Password for the PostgreSQL user

@@ -8,7 +8,7 @@ from connect import conn, cur
 # Takes name and phone number as input
 # Uses INSERT SQL query to store data
 def add_contact(name, phone):
-    cur.execute("CALL upsert_contact(%s, %s)", (name, phone))
+    cur.execute("CALL public.upsert_contact(%s::text, %s::text)", (name, phone))
     conn.commit()
 
 
@@ -26,7 +26,7 @@ def show():
         print(f"{i}. Name: {name} | Phone: {phone}")
 
 def update_phone(name, new_phone):
-    cur.execute("CALL upsert_contact(%s, %s)", (name, new_phone))
+    cur.execute("CALL public.upsert_contact(%s::text, %s::text)", (name, new_phone))
     conn.commit()
 
 def update_name(old_name, new_name):
@@ -61,7 +61,7 @@ def search_phone_prefix(prefix):
         print(f"{i}. ID: {id} | Name: {name} | Phone: {phone}")
 
 def delete_contact(value):
-    cur.execute("CALL delete_contact(%s)", (value,))
+    cur.execute("CALL public.delete_contact(%s::text)", (value,))
     conn.commit()
 
 # Function to import contacts from CSV file
@@ -108,13 +108,13 @@ while True:
         name=input("Name: ")
         delete_contact(name)
         print("Done")
-    elif n=="7":
+    elif n=="6":
         name=input("Enter name to search: ")
         search_name(name)
-    elif n=="8":
+    elif n=="7":
         phone=input("Enter phone to search: ")
         search_phone(phone)
-    elif n=="9":
+    elif n=="8":
         prefix=input("Enter phone prefix: ")
         search_phone_prefix(prefix)
     elif n=="10":
