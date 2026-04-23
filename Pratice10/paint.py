@@ -5,13 +5,14 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((1200, 600))
     clock = pygame.time.Clock()
+    canvas = pygame.Surface((1200, 600))
+    canvas.fill((0, 0, 0))
     
     radius = 15
     mode = 'blue'
     points = []
     strokes = [] 
     figures = []
-    figures_perm = []
     drawing = True
     drawing_mode = 1
     fig_start = 0
@@ -51,9 +52,8 @@ def main():
                 
                 elif event.key == pygame.K_c:
                     mode = 'erase'
-                    if points:   
-                        strokes.append((points.copy(), mode, radius))
-                    points = []   # start a new continuous line
+                    drawing_mode = 1
+                    points = []
                 elif event.key == pygame.K_l:
                     drawing_mode = 1
                 elif event.key == pygame.K_z:
@@ -63,7 +63,7 @@ def main():
                 elif event.key == pygame.K_a:
                     strokes = []
                     points = [] 
-                    figures_perm = []  
+                    canvas.fill((0, 0, 0))
             
                     
 
@@ -74,7 +74,7 @@ def main():
                     radius = min(200, radius + 1)
                     
                     if drawing_mode == 1:
-                        if points:   
+                        if points and mode != 'erase':
                             strokes.append((points.copy(), mode, radius))
                     points = []   # start a new continuous line
                     
@@ -84,26 +84,29 @@ def main():
                     print("Button Clicked!")
                 if r.collidepoint(mouse_pos):
                     mode = 'red'
-                    if points:   
+                    if points and mode != 'erase':
                         strokes.append((points.copy(), mode, radius))
                     points = []   # start a new continuous line
                 elif g.collidepoint(mouse_pos):
                     mode = 'green'
-                    if points:   
+                    if points and mode != 'erase':
                         strokes.append((points.copy(), mode, radius))
                     points = []   # start a new continuous line
                 elif b.collidepoint(mouse_pos):
                     mode = 'blue'
-                    if points:   
+                    if points and mode != 'erase':
                         strokes.append((points.copy(), mode, radius))
                     points = []   # start a new continuous line
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1 and (points or figures):
                     if drawing_mode == 1:
-                        strokes.append((points.copy(), mode, radius))
+                        if mode != 'erase':
+                            strokes.append((points.copy(), mode, radius))
                         points = []
-                    if drawing_mode in (2,3 ):
-                        figures_perm.append((figures.copy(), mode, radius, drawing_mode))
+                    if drawing_mode in (2,3):
+                        if figures:
+                            st, et = figures[0]
+                            drawfig(canvas, 0, st, et, radius, mode, drawing_mode)
                         figures = []
                 
                     
@@ -119,25 +122,19 @@ def main():
                 
                 
         screen.fill((0, 0, 0))
+        screen.blit(canvas, (0, 0))
 
         
 
-        # --- Draw all saved strokes ---
-        for pts, col_mode, rad in strokes:
-            for i in range(len(pts) - 1):
-                drawLineBetween(screen, i, pts[i], pts[i+1], rad, col_mode)
-        
-        for coords, col_mode, rad, d_mode in figures_perm:
-            st, et = coords[0]
-            drawfig(screen, 0, st, et, rad, col_mode,d_mode)
 
         # --- Draw the current stroke (if drawing is enabled) ---
         if drawing:
-            if drawing_mode == 1:
-                for i in range(len(points) - 1):
-                    drawLineBetween(screen, i, points[i], points[i+1], radius, mode)
-            elif drawing_mode in (2,3) and figures:
+            if drawing_mode == 1 and len(points) > 1:
+                # draw only the LAST segment to avoid multiple redraws
+                drawLineBetween(canvas, 0, points[-2], points[-1], radius, mode)
+            elif drawing_mode in (2,3) and figures and mode != 'erase':
                 s,e = figures[0]
+                # preview figure ONLY on screen (not canvas)
                 drawfig(screen, 0, s, e, radius, mode, drawing_mode)
             
         font = pygame.font.SysFont(None, 26)

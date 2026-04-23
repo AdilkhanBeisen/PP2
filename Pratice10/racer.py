@@ -134,11 +134,12 @@ class EnemyCar:
             pygame.draw.rect(surface, BLACK, (wx, wy, 8, 14), border_radius=2)
 
     def update(self):
-        # Move enemy downward
-        self.y += self.spd
+        # Move enemy downward (faster + smoother)
+        self.y += self.spd * 1.2
 
     def off_screen(self):
-        return self.y > SCREEN_H
+        # allow enemy to fully pass bottom before removing
+        return self.y > SCREEN_H + 60
 
     def rect(self):
         return pygame.Rect(self.x + 4, self.y + 4, self.W - 8, self.H - 8)
@@ -211,12 +212,12 @@ def main():
 
     score       = 0
     coin_count  = 0
-    base_speed  = 4      # starting enemy/coin speed
+    base_speed  = 7      # faster movement so enemies clearly go top → bottom
     game_over   = False
 
     # Spawn timers (in frames)
     enemy_timer    = 0
-    enemy_interval = 80
+    enemy_interval = 40   # spawn enemies more frequently
     coin_timer     = 0
     coin_interval  = random.randint(100, 180)   # coins appear randomly
 
