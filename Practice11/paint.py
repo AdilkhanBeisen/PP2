@@ -2,12 +2,10 @@ import pygame
 
 
 def main():
-    # Initialize pygame and create main window
     pygame.init()
     screen = pygame.display.set_mode((1200, 600))
     clock = pygame.time.Clock()
     canvas = pygame.Surface((1200, 600))
-    # Canvas is a separate surface where we permanently draw shapes
     canvas.fill((255, 255, 255))
     
     radius = 15
@@ -18,12 +16,6 @@ def main():
     drawing = True
     drawing_mode = 1
     fig_start = 0
-    # radius = brush size
-    # mode = current color mode
-    # points = current stroke points
-    # strokes = list of completed strokes
-    # figures = temporary storage for shapes (rectangle, circle, etc)
-    # drawing_mode defines what we draw (line, rectangle, etc)
     text = "P = Stop/Draw\n" \
            "Z = Rectangle | X = Circle\n" \
            "E = Square | T = Right Triangle\n" \
@@ -33,7 +25,6 @@ def main():
     g = pygame.Rect(30, 200, 30, 30)
     b = pygame.Rect(30, 250, 30, 30)
     while True:
-        # Handle all user input (keyboard + mouse)
         pressed = pygame.key.get_pressed()
         mouse_pos = pygame.mouse.get_pos()
         alt_held = pressed[pygame.K_LALT] or pressed[pygame.K_RALT]
@@ -45,7 +36,6 @@ def main():
                 return
             
             if event.type == pygame.KEYDOWN:
-                # Handle keyboard controls for tools and modes
                 if event.key == pygame.K_w and ctrl_held:
                     return
                 if event.key == pygame.K_F4 and alt_held:
@@ -83,7 +73,6 @@ def main():
                     
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                # Start drawing or change brush size depending on mouse click
                 if event.button == 1: # left click grows radius
                     if drawing_mode in (2,3,4,5,6,7):
                         fig_start = mouse_pos
@@ -114,7 +103,6 @@ def main():
                         strokes.append((points.copy(), mode, radius))
                     points = []   # start a new continuous line
             if event.type == pygame.MOUSEBUTTONUP:
-                # Finish drawing shape or line and save it to canvas
                 if event.button == 1 and (points or figures):
                     if drawing_mode == 1:
                         if mode != 'erase':
@@ -129,7 +117,6 @@ def main():
                     
             
             if event.type == pygame.MOUSEMOTION:
-                # While holding mouse, update drawing (line or preview shape)
                 if event.buttons[0]:   # Left mouse button is held
                     if drawing_mode == 1:
                         position = event.pos
@@ -139,14 +126,13 @@ def main():
                         figures = [(fig_start, mouse_pos)]
                 
                 
-        # Clear screen and redraw everything each frame
         screen.fill((255, 255, 255))
         screen.blit(canvas, (0, 0))
 
         
 
 
-        # Draw current preview (line or shape) while dragging mouse
+        # --- Draw the current stroke (if drawing is enabled) ---
         if drawing:
             if drawing_mode == 1 and len(points) > 1:
                 # draw only the LAST segment to avoid multiple redraws
@@ -156,7 +142,6 @@ def main():
                 # preview figure ONLY on screen (not canvas)
                 drawfig(screen, 0, s, e, radius, mode, drawing_mode)
             
-        # Draw UI text (instructions) on screen
         font = pygame.font.SysFont(None, 26)
 
         # split text into lines and draw each line separately
@@ -175,7 +160,6 @@ def main():
         clock.tick(60)
 
 def drawfig(screen, index, start, end, width, color_mode, draw_mode):
-    # Draw different geometric shapes depending on draw_mode
     x1, y1 = start
     x2, y2 = end
     r = int(((x2-x1)**2 + (y2-y1)**2) ** 0.5 / 2)
@@ -191,28 +175,25 @@ def drawfig(screen, index, start, end, width, color_mode, draw_mode):
         color = (0,0,0)
     
     
-    # Rectangle
     if draw_mode == 2:
         rect = pygame.Rect(min(x1,x2), min(y1,y2), abs(x2-x1), abs(y2-y1))
         pygame.draw.rect(screen, color, rect, width)
-    # Circle
     elif draw_mode == 3:
         cx = (x1 + x2) // 2
         cy = (y1 + y2) // 2
         r = int(((x2-x1)**2 + (y2-y1)**2) ** 0.5 / 2)
         pygame.draw.circle(screen, color, (cx, cy), max(1, r), width)
-    # Square (equal sides)
     elif draw_mode == 4:
         # square
         size = max(abs(x2-x1), abs(y2-y1))
         rect = pygame.Rect(x1, y1, size, size)
         pygame.draw.rect(screen, color, rect, width)
-    # Right triangle (90 degrees)
+
     elif draw_mode == 5:
         # right triangle
         points = [(x1, y1), (x2, y1), (x1, y2)]
         pygame.draw.polygon(screen, color, points, width)
-    # Equilateral triangle (all sides equal)
+
     elif draw_mode == 6:
         # equilateral triangle
         import math
@@ -224,7 +205,7 @@ def drawfig(screen, index, start, end, width, color_mode, draw_mode):
             (x1 + side//2, y1 - height)
         ]
         pygame.draw.polygon(screen, color, points, width)
-    # Rhombus (diamond shape)
+
     elif draw_mode == 7:
         # rhombus
         cx = (x1 + x2) // 2
@@ -241,7 +222,6 @@ def drawfig(screen, index, start, end, width, color_mode, draw_mode):
 
 
 def drawLineBetween(screen, index, start, end, width, color_mode):
-    # Draw smooth line between two points using small circles
     c1 = max(0, min(255, 2 * index - 256))
     c2 = max(0, min(255, 2 * index))
     
