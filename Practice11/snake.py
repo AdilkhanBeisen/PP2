@@ -90,10 +90,10 @@ class Snake:
     # Draw snake head and body on the screen
     def draw(self):
         head = self.body[0]
-        pygame.draw.rect(screen, colorBLACK, (head.x * CELL, head.y * CELL, CELL, CELL))
+        pygame.draw.rect(screen, colorRED, (head.x * CELL, head.y * CELL, CELL, CELL))
     
         for segment in self.body[1:]:
-            pygame.draw.rect(screen, colorYELLOW, (segment.x * CELL, segment.y * CELL, CELL, CELL))
+            pygame.draw.rect(screen, colorGREEN, (segment.x * CELL, segment.y * CELL, CELL, CELL))
 
     # Check if snake eats food and update score/level
     def check_collision(self, food):
